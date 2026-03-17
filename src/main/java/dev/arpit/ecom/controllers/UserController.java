@@ -1,0 +1,183 @@
+package dev.arpit.ecom.controllers;
+
+import dev.arpit.ecom.dtos.*;
+import dev.arpit.ecom.exceptions.*;
+import dev.arpit.ecom.mappers.UserDTOs;
+import dev.arpit.ecom.models.User;
+import dev.arpit.ecom.services.IUserService;
+import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+public class UserController implements IUserController {
+  @Autowired
+  private IUserService iUserService;
+
+  @Override
+  @PostMapping(Endpoints.v1Signup)
+  public ResponseEntity<@NonNull ResponseDto<SignupUserResponseDto>> signupUser (@RequestBody SignupUserRequestDto requestDto) {
+    ResponseDto<SignupUserResponseDto> responseDto = new ResponseDto<>();
+
+    try {
+      doValidationsForSignupUser(requestDto);
+      User user = UserDTOs.getUser(requestDto);
+      User signedupUser = iUserService.signupUser(user);
+      responseDto.setData(UserDTOs.getSignupUserResponseDto(signedupUser));
+      responseDto.setMeta(new MetaDataDto(
+          ResponseCode.ECOM_SUCCESS_200,
+          "User with id " + signedupUser.getId() + " signed up successfully.",
+          "User signed up successfully.",
+          null,
+          null
+      ));
+
+      return ResponseEntity.ok(responseDto);
+    } catch(BaseException e) {
+      responseDto.setMeta(new MetaDataDto(
+          e.getCode(),
+          e.getMessage(),
+          e.getDisplayMessage(),
+          null,
+          null
+      ));
+
+      ResponseEntity.BodyBuilder bodyBuilder = ResponseEntity.badRequest();
+      return bodyBuilder.body(responseDto);
+    }
+  }
+
+  @Override
+  @PostMapping(Endpoints.v1Login)
+  public ResponseEntity<@NonNull ResponseDto<LoginUserResponseDto>> loginUser (@RequestBody LoginUserRequestDto requestDto) {
+    ResponseDto<LoginUserResponseDto> responseDto = new ResponseDto<>();
+
+    try {
+      doValidationsForLoginUser(requestDto);
+      User user = UserDTOs.getUser(requestDto);
+      User loggedinUser = iUserService.loginUser(user);
+      responseDto.setData(UserDTOs.getLoginUserResponseDto(loggedinUser));
+      responseDto.setMeta(new MetaDataDto(
+          ResponseCode.ECOM_SUCCESS_200,
+          "User with id " + loggedinUser.getId() + " logged in successfully.",
+          "User logged in successfully.",
+          null,
+          null
+      ));
+      return ResponseEntity.ok(responseDto);
+    } catch (BaseException e) {
+      responseDto.setMeta(new MetaDataDto(
+          e.getCode(),
+          e.getMessage(),
+          e.getDisplayMessage(),
+          null,
+          null
+      ));
+      ResponseEntity.BodyBuilder bodyBuilder = ResponseEntity.badRequest();
+      return bodyBuilder.body(responseDto);
+    }
+  }
+
+  @Override
+  @PutMapping(Endpoints.v1usersById)
+  public ResponseEntity<@NonNull ResponseDto<UpdateUserResponseDto>> updateUser (@PathVariable Long userId, @RequestBody UpdateUserRequestDto requestDto) {
+    ResponseDto<UpdateUserResponseDto> responseDto = new ResponseDto<>();
+
+    try {
+      doValidationsForUpdateUser(requestDto);
+      User user = UserDTOs.getUser(requestDto);
+      User updatedUser = iUserService.updateUser(userId, user);
+      responseDto.setData(UserDTOs.getUpdateUserResponseDto(updatedUser));
+      responseDto.setMeta(new MetaDataDto(
+          ResponseCode.ECOM_SUCCESS_200,
+          "User with id " + userId + " updated successfully.",
+          "User updated successfully.",
+          null,
+          null
+      ));
+
+      return ResponseEntity.ok(responseDto);
+    } catch(BaseException e) {
+      responseDto.setMeta(new MetaDataDto(
+          e.getCode(),
+          e.getMessage(),
+          e.getDisplayMessage(),
+          null,
+          null
+      ));
+
+      ResponseEntity.BodyBuilder bodyBuilder = ResponseEntity.badRequest();
+      return bodyBuilder.body(responseDto);
+    }
+  }
+
+  @Override
+  @DeleteMapping(Endpoints.v1usersById)
+  public ResponseEntity<@NonNull ResponseDto<DeleteUserResponseDto>> deleteUser (@PathVariable Long userId, @RequestBody DeleteUserRequestDto requestDto) {
+    ResponseDto<DeleteUserResponseDto> responseDto = new ResponseDto<>();
+
+    try {
+      doValidationsForDeleteUser(userId, requestDto);
+      iUserService.deleteUser(userId);
+      responseDto.setData(new DeleteUserResponseDto("User with id " + userId + " deleted successfully."));
+      responseDto.setMeta(new MetaDataDto(
+          ResponseCode.ECOM_SUCCESS_200,
+          "User with id " + userId + " deleted successfully.",
+          "Your user deleted successfully.",
+          null,
+          null
+      ));
+      return ResponseEntity.ok(responseDto);
+    } catch (BaseException e) {
+      responseDto.setMeta(new MetaDataDto(
+          e.getCode(),
+          e.getMessage(),
+          e.getDisplayMessage(),
+          null,
+          null
+      ));
+      ResponseEntity.BodyBuilder bodyBuilder = ResponseEntity.badRequest();
+      return bodyBuilder.body(responseDto);
+    }
+  }
+
+  private void doValidationsForSignupUser(SignupUserRequestDto requestDto) throws InvalidSignupUserRequestDtoException {
+    if(requestDto == null) {
+      throw new InvalidSignupUserRequestDtoException(ResponseCode.ECOM_FAILURE_400, "Create User Request DTO can't be null", "Please share the correct create user request payload");
+    }
+    if(requestDto.getEmail() == null || requestDto.getEmail().isEmpty()) {
+      throw new InvalidSignupUserRequestDtoException(ResponseCode.ECOM_FAILURE_400, "User email can't be null or empty", "Please share the correct create user request payload");
+    }
+    if(requestDto.getPassword() == null || requestDto.getPassword().isEmpty()) {
+      throw new InvalidSignupUserRequestDtoException(ResponseCode.ECOM_FAILURE_400, "User password can't be null or empty", "Please share the correct create user request payload");
+    }
+  }
+
+  private void doValidationsForLoginUser(LoginUserRequestDto requestDto) throws InvalidLoginUserRequestDtoException {
+    if(requestDto == null) {
+      throw new InvalidLoginUserRequestDtoException(ResponseCode.ECOM_FAILURE_400, "Create User Request DTO can't be null", "Please share the correct create user request payload");
+    }
+    if(requestDto.getEmail() == null || requestDto.getEmail().isEmpty()) {
+      throw new InvalidLoginUserRequestDtoException(ResponseCode.ECOM_FAILURE_400, "User email can't be null or empty", "Please share the correct create user request payload");
+    }
+    if(requestDto.getPassword() == null || requestDto.getPassword().isEmpty()) {
+      throw new InvalidLoginUserRequestDtoException(ResponseCode.ECOM_FAILURE_400, "User password can't be null or empty", "Please share the correct create user request payload");
+    }
+  }
+
+  private void doValidationsForUpdateUser(UpdateUserRequestDto requestDto) throws InvalidUpdateUserRequestDtoException {
+    if(requestDto == null) {
+      throw new InvalidUpdateUserRequestDtoException(ResponseCode.ECOM_FAILURE_400, "Create User Request DTO can't be null", "Please share the correct create user request payload");
+    }
+  }
+
+  private void doValidationsForDeleteUser(Long userId, DeleteUserRequestDto requestDto) throws InvalidUserIdException, InvalidDeleteUserRequestDtoException {
+    if(userId == null || userId == 0L) {
+      throw new InvalidUserIdException(ResponseCode.ECOM_FAILURE_400, "User id can't be null or 0", "Please share the correct delete user request payload");
+    }
+    if(requestDto == null) {
+      throw new InvalidDeleteUserRequestDtoException(ResponseCode.ECOM_FAILURE_400, "Delete User Request DTO can't be null", "Please share the correct delete user request payload");
+    }
+  }
+}

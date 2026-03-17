@@ -5,7 +5,7 @@ import dev.arpit.ecom.exceptions.InvalidGiftCardException;
 import dev.arpit.ecom.exceptions.InvalidGiftCardIdException;
 import dev.arpit.ecom.models.GiftCard;
 import dev.arpit.ecom.models.GiftCardLedger;
-import dev.arpit.ecom.models.TransactionType;
+import dev.arpit.ecom.models.GiftCardTransactionType;
 import dev.arpit.ecom.repositories.GiftCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ public class GiftCardService implements IGiftCardService {
       );
 
       GiftCardLedger giftCardLedger = new GiftCardLedger(
-          TransactionType.CREDIT,
+          GiftCardTransactionType.CREDIT,
           amount
       );
       giftCardLedger = iGiftCardLedgerService.save(giftCardLedger);
@@ -61,7 +61,7 @@ public class GiftCardService implements IGiftCardService {
         giftCard.setAmount(giftCard.getAmount() - amountToRedeem);
 
         GiftCardLedger ledger = new GiftCardLedger(
-            TransactionType.DEBIT,
+            GiftCardTransactionType.DEBIT,
             amountToRedeem
         );
         ledger = iGiftCardLedgerService.save(ledger);
@@ -79,7 +79,7 @@ public class GiftCardService implements IGiftCardService {
       return giftCardRepository.findById(giftCardId).orElseThrow(() -> new InvalidGiftCardIdException(
           ResponseCode.ECOM_FAILURE_400,
           "Invalid gift card id " + giftCardId,
-          "In valid gift card id is passed."
+          "Invalid gift card id is passed."
       ));
     }
 }

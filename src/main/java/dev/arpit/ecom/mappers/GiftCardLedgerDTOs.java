@@ -6,7 +6,7 @@ import dev.arpit.ecom.models.GiftCardLedger;
 public class GiftCardLedgerDTOs {
   public static GiftCardLedgerResponseDto getGiftCardLedgerResponseDto(GiftCardLedger ledger) {
     return new GiftCardLedgerResponseDto(
-        ledger.getTransactionType().toString(),
+        ledger.getGiftCardTransactionType().toString(),
         ledger.getAmount()
     );
   }

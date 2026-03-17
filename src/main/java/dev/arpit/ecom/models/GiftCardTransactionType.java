@@ -1,6 +1,6 @@
 package dev.arpit.ecom.models;
 
-public enum TransactionType {
+public enum GiftCardTransactionType {
   CREDIT,
   DEBIT
 }

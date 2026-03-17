@@ -6,8 +6,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @ToString
@@ -16,8 +14,8 @@ import java.time.LocalDateTime;
 @Entity(name = "ecom_gift_card_ledger")
 public class GiftCardLedger extends BaseModel {
   @Enumerated(EnumType.STRING)
-  @Column(nullable = false)
-  private TransactionType transactionType;
+  @Column(name = "transaction_type", nullable = false)
+  private GiftCardTransactionType giftCardTransactionType;
   @Column(nullable = false)
   private double amount;
 }
