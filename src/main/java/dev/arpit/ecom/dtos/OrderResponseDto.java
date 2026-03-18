@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class OrderResponseDto {
+  private long id;
   private UserResponseDto user;
   private List<OrderDetailResponseDto> orderDetails;
   private String orderStatus;

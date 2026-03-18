@@ -1,14 +1,14 @@
 package dev.arpit.ecom.services;
 
 import dev.arpit.ecom.dtos.ResponseCode;
-import dev.arpit.ecom.exceptions.InvalidOrderIdException;
-import dev.arpit.ecom.exceptions.NoInventoryExistForProduct;
-import dev.arpit.ecom.exceptions.OrderCannotBeCancelledException;
-import dev.arpit.ecom.exceptions.UnauthorizedAccessException;
+import dev.arpit.ecom.exceptions.*;
 import dev.arpit.ecom.models.*;
 import dev.arpit.ecom.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class OrderService implements IOrderService {
@@ -16,6 +16,8 @@ public class OrderService implements IOrderService {
   private OrderRepository orderRepository;
   @Autowired
   private IInventoryService iInventoryService;
+  @Autowired
+  private IOrderDetailService iOrderDetailService;
 
   @Override
   public Order cancelOrder(long orderId, User user) throws InvalidOrderIdException, UnauthorizedAccessException, OrderCannotBeCancelledException, NoInventoryExistForProduct {
@@ -37,6 +39,18 @@ public class OrderService implements IOrderService {
 
     order.setOrderStatus(OrderStatus.CANCELLED);
     updateInventory(order);
+    return this.save(order);
+  }
+
+  @Override
+  public Order placeOrder (User user, List<ProductIdQuantityPair> orderDetailsRequest) throws InvalidProductIdException, NoInventoryExistForProduct {
+    Order order = new Order(
+        user,
+        new ArrayList<>(),
+        OrderStatus.PLACED
+    );
+    order = this.save(order);
+    order.setOrderDetails(iOrderDetailService.createOrderDetails(order, orderDetailsRequest));
     return this.save(order);
   }
 
