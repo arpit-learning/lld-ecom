@@ -16,4 +16,7 @@ public class DeliveryTask extends BaseModel {
   @Embedded
   @Column(nullable = false)
   private Location pickupLocation;
+  @Embedded
+  @Column(nullable = false)
+  private Location dropLocation;
 }
