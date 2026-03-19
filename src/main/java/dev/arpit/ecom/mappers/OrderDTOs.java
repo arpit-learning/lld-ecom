@@ -27,18 +27,4 @@ public class OrderDTOs {
         order.getOrderStatus().toString()
     );
   }
-
-  public static ProductIdQuantityPair getProductIdQuantityPair(ProductIdQuantityRequestDto requestDto) {
-    return new ProductIdQuantityPair(
-        requestDto.getProductId(),
-        requestDto.getQuantity()
-    );
-  }
-
-  public static List<ProductIdQuantityPair> getProductIdQuantityPairs(List<ProductIdQuantityRequestDto> requestDto) {
-    return requestDto.stream().map(e -> new ProductIdQuantityPair(
-        e.getProductId(),
-        e.getQuantity()
-    )).toList();
-  }
 }

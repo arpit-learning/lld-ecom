@@ -17,7 +17,7 @@ import java.util.List;
 @Entity(name = "ecom_batched_delivery_task")
 public class BatchedDeliveryTask extends BaseModel {
     @OneToMany
-    @JoinColumn(name = "batched_task_id")
+    @JoinColumn(name = "batched_task_id", referencedColumnName = "id")
     @ToString.Exclude
     private List<DeliveryTask> tasks;
     private LocalDateTime batchedAt;

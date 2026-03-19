@@ -27,10 +27,10 @@ public class DeliveryPartnerTaskMappingService implements IDeliveryPartnerTaskMa
 
         List<PairCandidate> candidates = new ArrayList<>();
         for(DeliveryPartner partner : partners) {
-            Location partnerLocation = partner.getCurrentLocation();
+            Location partnerLocation = partner.getAddress().getLocation();
 
             for(DeliveryTask task : tasks) {
-                Location taskLocation = task.getPickupLocation();
+                Location taskLocation = task.getPickupAddress().getLocation();
                 double distance = DistanceUtils.calculateDistance(partnerLocation, taskLocation);
                 candidates.add(new PairCandidate(partner, task, distance));
             }

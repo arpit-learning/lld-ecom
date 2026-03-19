@@ -8,5 +8,6 @@ import lombok.Data;
 public class DeliveryTaskResponseDto {
   private long id;
   private OrderResponseDto order;
-  private LocationResponseDto pickupLocation;
+  private AddressResponseDto pickupAddress;
+  private AddressResponseDto dropAddress;
 }

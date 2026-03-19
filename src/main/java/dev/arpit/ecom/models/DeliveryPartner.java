@@ -1,8 +1,6 @@
 package dev.arpit.ecom.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -14,6 +12,7 @@ import lombok.*;
 public class DeliveryPartner extends BaseModel {
   @Column(nullable = false, unique = true)
   private String name;
-  @Embedded
-  private Location currentLocation;
+  @OneToOne(optional = false)
+  @JoinColumn(name = "address_id", referencedColumnName = "id")
+  private Address address;
 }

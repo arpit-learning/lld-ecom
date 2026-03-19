@@ -8,7 +8,7 @@ import java.util.List;
 public class BatchedDeliveryTaskDTOs {
   public static BuildBatchedTaskRouteResponseDto getBuildBatchedTaskRouteResponseDto(List<Location> routeToBeTaken) {
     return new BuildBatchedTaskRouteResponseDto(
-        routeToBeTaken.stream().map(DeliveryPartnerTaskMappingDTOs::getLocationResponseDto
+        routeToBeTaken.stream().map(AddressDTOs::getLocationResponseDto
         ).toList()
     );
   }

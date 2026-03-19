@@ -8,5 +8,5 @@ import lombok.Data;
 public class DeliveryPartnerResponseDto {
   private long id;
   private String name;
-  private LocationResponseDto currentLocation;
+  private AddressResponseDto address;
 }

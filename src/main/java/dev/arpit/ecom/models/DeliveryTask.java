@@ -13,10 +13,10 @@ public class DeliveryTask extends BaseModel {
   @OneToOne(optional = false)
   @JoinColumn(name = "order_id", referencedColumnName = "id")
   private Order order;
-  @Embedded
-  @Column(nullable = false)
-  private Location pickupLocation;
-  @Embedded
-  @Column(nullable = false)
-  private Location dropLocation;
+  @OneToOne(optional = false)
+  @JoinColumn(name = "pickup_address_id", referencedColumnName = "id")
+  private Address pickupAddress;
+  @OneToOne(optional = false)
+  @JoinColumn(name = "drop_address_id", referencedColumnName = "id")
+  private Address dropAddress;
 }

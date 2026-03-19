@@ -4,6 +4,7 @@ import dev.arpit.ecom.dtos.*;
 import dev.arpit.ecom.exceptions.BaseException;
 import dev.arpit.ecom.exceptions.InvalidPlaceOrderRequestDtoException;
 import dev.arpit.ecom.mappers.OrderDTOs;
+import dev.arpit.ecom.mappers.OrderDetailDTOs;
 import dev.arpit.ecom.models.Order;
 import dev.arpit.ecom.models.User;
 import dev.arpit.ecom.services.IOrderService;
@@ -70,7 +71,7 @@ public class OrderController implements IOrderController {
       long userId = requestDto.getUserId();
       User user = iUserService.findById(userId);
       List<ProductIdQuantityRequestDto> orderDetails = requestDto.getOrderDetails();
-      Order order = iOrderService.placeOrder(user, OrderDTOs.getProductIdQuantityPairs(orderDetails));
+      Order order = iOrderService.placeOrder(user, OrderDetailDTOs.getProductIdQuantityPairs(orderDetails));
       responseDto.setData(OrderDTOs.getPlaceOrderResponseDto(order));
       responseDto.setMeta(new MetaDataDto(
           ResponseCode.ECOM_SUCCESS_200,

@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface MapsAdapter {
   List<Location> buildRoute(List<Location> locations);
+  int calEstimate(Location dropAddress, Location pickupAddress);
 }

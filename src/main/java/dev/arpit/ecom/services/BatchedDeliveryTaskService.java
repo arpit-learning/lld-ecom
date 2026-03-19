@@ -32,7 +32,7 @@ public class BatchedDeliveryTaskService implements IBatchedDeliveryTaskService {
                     "Batched task not found"
                 )
             );
-        List<Location> locations = batchedDeliveryTask.getTasks().stream().map(DeliveryTask::getDropLocation).toList();
+        List<Location> locations = batchedDeliveryTask.getTasks().stream().map(task -> task.getPickupAddress().getLocation()).toList();
         return mapsAdapter.buildRoute(locations);
     }
 }
