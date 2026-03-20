@@ -2,6 +2,7 @@ package dev.arpit.ecom.mappers;
 
 import dev.arpit.ecom.dtos.*;
 import dev.arpit.ecom.models.User;
+import dev.arpit.ecom.models.UserType;
 
 import java.util.ArrayList;
 
@@ -15,7 +16,7 @@ public class UserDTOs {
   }
 
   public static User getUser(SignupUserRequestDto requestDto) {
-    return new User(null, requestDto.getEmail(), null, requestDto.getPassword(), new ArrayList<>());
+    return new User(null, requestDto.getEmail(), null, requestDto.getPassword(), new ArrayList<>(), UserType.CUSTOMER);
   }
 
   public static SignupUserResponseDto getSignupUserResponseDto(User user) {
@@ -27,7 +28,7 @@ public class UserDTOs {
   }
 
   public static User getUser(LoginUserRequestDto requestDto) {
-    return new User(null, requestDto.getEmail(), null, requestDto.getPassword(), null);
+    return new User(null, requestDto.getEmail(), null, requestDto.getPassword(), null, null);
   }
 
   public static UpdateUserResponseDto getUpdateUserResponseDto(User user) {
@@ -35,6 +36,6 @@ public class UserDTOs {
   }
 
   public static User getUser(UpdateUserRequestDto requestDto) {
-    return new User(requestDto.getName(), requestDto.getEmail(), requestDto.getMobile(), null, null);
+    return new User(requestDto.getName(), requestDto.getEmail(), requestDto.getMobile(), null, null, UserType.valueOf(requestDto.getUserType()));
   }
 }

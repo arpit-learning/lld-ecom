@@ -12,6 +12,7 @@ public class Endpoints {
   public static final String v1Products = "v1/products";
   public static final String v1ProductsByIdRecommendations = "v1/products/{productId}/recommendations";
   public static final String v1Inventory = "v1/inventory";
+  public static final String v1InventoryUpsert = "v1/inventory/upsert";
   public static final String v1MatchPartnersNTasks = "v1/match-partners-n-tasks";
   public static final String v1BuildBatchedTaskRoute = "v1/build-batched-task-route";
   public static final String v1DeliveryEstimate = "v1/delivery-estimate";

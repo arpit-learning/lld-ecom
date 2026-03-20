@@ -1,9 +1,6 @@
 package dev.arpit.ecom.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
@@ -24,4 +21,6 @@ public class User extends BaseModel{
   @ToString.Exclude
   @OneToMany(mappedBy = "user")
   private List<Order> orders;
+  @Enumerated(EnumType.ORDINAL)
+  private UserType userType;
 }

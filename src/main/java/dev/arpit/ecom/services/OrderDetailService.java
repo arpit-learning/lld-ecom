@@ -1,7 +1,7 @@
 package dev.arpit.ecom.services;
 
 import dev.arpit.ecom.exceptions.InvalidProductIdException;
-import dev.arpit.ecom.exceptions.NoInventoryExistForProduct;
+import dev.arpit.ecom.exceptions.NoInventoryExistForProductException;
 import dev.arpit.ecom.models.*;
 import dev.arpit.ecom.repositories.OrderDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class OrderDetailService implements IOrderDetailService {
   private IInventoryService iInventoryService;
 
   @Override
-  public List<OrderDetail> createOrderDetails(Order order, List<ProductIdQuantityPair> orderDetailsReq) throws InvalidProductIdException, NoInventoryExistForProduct {
+  public List<OrderDetail> createOrderDetails(Order order, List<ProductIdQuantityPair> orderDetailsReq) throws InvalidProductIdException, NoInventoryExistForProductException {
     List<OrderDetail> orderDetails = new ArrayList<>();
 
     for(ProductIdQuantityPair orderDetailReq: orderDetailsReq) {

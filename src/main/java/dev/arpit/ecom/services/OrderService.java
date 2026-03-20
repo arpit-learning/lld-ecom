@@ -20,7 +20,7 @@ public class OrderService implements IOrderService {
   private IOrderDetailService iOrderDetailService;
 
   @Override
-  public Order cancelOrder(long orderId, User user) throws InvalidOrderIdException, UnauthorizedAccessException, OrderCannotBeCancelledException, NoInventoryExistForProduct {
+  public Order cancelOrder(long orderId, User user) throws InvalidOrderIdException, UnauthorizedAccessException, OrderCannotBeCancelledException, NoInventoryExistForProductException {
     Order order = this.findById(orderId);
     if(!order.getUser().equals(user)) {
       throw new UnauthorizedAccessException(
@@ -43,7 +43,7 @@ public class OrderService implements IOrderService {
   }
 
   @Override
-  public Order placeOrder (User user, List<ProductIdQuantityPair> orderDetailsRequest) throws InvalidProductIdException, NoInventoryExistForProduct {
+  public Order placeOrder (User user, List<ProductIdQuantityPair> orderDetailsRequest) throws InvalidProductIdException, NoInventoryExistForProductException {
     Order order = new Order(
         user,
         new ArrayList<>(),
@@ -68,7 +68,7 @@ public class OrderService implements IOrderService {
     return orderRepository.save(order);
   }
 
-  private void updateInventory(Order order) throws NoInventoryExistForProduct {
+  private void updateInventory(Order order) throws NoInventoryExistForProductException {
     if(order.getOrderDetails() != null && !order.getOrderDetails().isEmpty()) {
       for (OrderDetail orderDetail : order.getOrderDetails()) {
         Product product = orderDetail.getProduct();
