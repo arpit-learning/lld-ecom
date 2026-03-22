@@ -16,4 +16,5 @@ public class Endpoints {
   public static final String v1MatchPartnersNTasks = "v1/match-partners-n-tasks";
   public static final String v1BuildBatchedTaskRoute = "v1/build-batched-task-route";
   public static final String v1DeliveryEstimate = "v1/delivery-estimate";
+  public static final String v1Notifications = "v1/notifications";
 }

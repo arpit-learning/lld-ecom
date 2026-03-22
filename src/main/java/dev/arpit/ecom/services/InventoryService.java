@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 public class InventoryService implements IInventoryService {
   @Autowired
   private InventoryRepository inventoryRepository;
+  @Autowired
+  private INotificationService iNotificationService;
 
   @Override
   public Inventory updateInventory(Product product, int quantity) throws NoInventoryExistForProductException {
@@ -28,7 +30,11 @@ public class InventoryService implements IInventoryService {
             )
         );
 
-    inventory.setQuantity(inventory.getQuantity() + quantity);
+    int oldQuantity = inventory.getQuantity();
+    inventory.setQuantity(oldQuantity + quantity);
+    if (oldQuantity == 0) {
+      iNotificationService.sendNotifications(product);
+    }
     return inventoryRepository.save(inventory);
   }
 
