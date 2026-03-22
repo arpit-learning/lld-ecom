@@ -1,5 +1,7 @@
 package dev.arpit.ecom.services;
 
+import dev.arpit.ecom.dtos.ResponseCode;
+import dev.arpit.ecom.exceptions.HighDemandProductException;
 import dev.arpit.ecom.exceptions.InvalidProductIdException;
 import dev.arpit.ecom.exceptions.NoInventoryExistForProductException;
 import dev.arpit.ecom.models.*;
@@ -18,14 +20,28 @@ public class OrderDetailService implements IOrderDetailService {
   private IProductService iProductService;
   @Autowired
   private IInventoryService iInventoryService;
+  @Autowired
+  private IHighDemandProductService iHighDemandProductService;
 
   @Override
-  public List<OrderDetail> createOrderDetails(Order order, List<ProductIdQuantityPair> orderDetailsReq) throws InvalidProductIdException, NoInventoryExistForProductException {
+  public List<OrderDetail> createOrderDetails(Order order, List<ProductIdQuantityPair> orderDetailsReq) throws InvalidProductIdException, NoInventoryExistForProductException, HighDemandProductException {
     List<OrderDetail> orderDetails = new ArrayList<>();
 
     for(ProductIdQuantityPair orderDetailReq: orderDetailsReq) {
       Product product = iProductService.findById(orderDetailReq.getProductId());
-      iInventoryService.updateInventory(product, orderDetailReq.getQuantity());
+      HighDemandProduct highDemandProduct = iHighDemandProductService.findByProduct(product);
+
+      if(highDemandProduct != null) {
+        if(orderDetailReq.getQuantity() > highDemandProduct.getMaxQuantity()) {
+          throw new HighDemandProductException(
+              ResponseCode.ECOM_FAILURE_400,
+              "Cannot place order for quantities greater than " + highDemandProduct.getMaxQuantity(),
+              "Cannot place order for quantities greater than " + highDemandProduct.getMaxQuantity()
+          );
+        }
+      }
+
+      iInventoryService.updateInventory(product, -orderDetailReq.getQuantity());
       orderDetails.add(new OrderDetail(
           order,
           product,

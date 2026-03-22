@@ -43,7 +43,7 @@ public class OrderService implements IOrderService {
   }
 
   @Override
-  public Order placeOrder (User user, List<ProductIdQuantityPair> orderDetailsRequest) throws InvalidProductIdException, NoInventoryExistForProductException {
+  public Order placeOrder (User user, List<ProductIdQuantityPair> orderDetailsRequest) throws InvalidProductIdException, NoInventoryExistForProductException, HighDemandProductException {
     Order order = new Order(
         user,
         new ArrayList<>(),

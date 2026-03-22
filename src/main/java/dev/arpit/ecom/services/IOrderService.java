@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface IOrderService {
   Order cancelOrder(long orderId, User user) throws InvalidOrderIdException, UnauthorizedAccessException, OrderCannotBeCancelledException, NoInventoryExistForProductException;
-  Order placeOrder(User user, List<ProductIdQuantityPair> orderDetails) throws InvalidProductIdException, NoInventoryExistForProductException;
+  Order placeOrder(User user, List<ProductIdQuantityPair> orderDetails) throws InvalidProductIdException, NoInventoryExistForProductException, HighDemandProductException;
   Order findById(long orderId) throws InvalidOrderIdException;
   Order save(Order order);
 }
